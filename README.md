@@ -11,3 +11,7 @@
 - pdf /png export
 - nice gui mini malistisk
 - cool animations
+- valg af sorthvis eller farve
+
+- installer
+- 
