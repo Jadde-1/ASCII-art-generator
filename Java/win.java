@@ -13,7 +13,8 @@ public class win extends JPanel{
     public int imgheight;
 
     String imgpath = "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg";
-
+    // Jasper path: "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
+    // Malik path: "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg"
     win(){
         JFrame mainFrame = new JFrame("Blur");
         mainFrame.setPreferredSize(new Dimension(width,height));
