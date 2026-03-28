@@ -2,7 +2,10 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     // scaler billedet mere eller mindre
-    public static double scale = 1.2;
+    // 0 er normal size
+    // Minus ganger op
+    // Plus dividere
+    public static double scale = 2;
 
     public static void main(String[] args) {
         new win();

@@ -8,17 +8,26 @@ public class Downscaler {
 
 
     public static BufferedImage down(BufferedImage bufferedImage,double scale) {
-        int newWidth = (int) (bufferedImage.getWidth() / scale);
-        int newHeight = (int) (bufferedImage.getHeight() / scale);
-        //return bufferedImage;
+        int newWidth;
+        int newHeight;
 
-        BufferedImage NewImg = new BufferedImage(newWidth, newHeight, bufferedImage.getType());
+        if (scale < 1 ) {
+            scale -= 1;
+            newWidth = (int) (bufferedImage.getWidth() * scale)* -1;
+            newHeight = (int) (bufferedImage.getHeight() * scale) * -1;
+        } else {
+            scale += 1;
+            newWidth = (int) (bufferedImage.getWidth() / scale);
+            newHeight = (int) (bufferedImage.getHeight() / scale);
+        }
 
-        Graphics2D g = NewImg.createGraphics();
+        BufferedImage SizedImg = new BufferedImage(newWidth, newHeight, bufferedImage.getType());
+
+        Graphics2D g = SizedImg.createGraphics();
         g.drawImage(bufferedImage, 0,0,newWidth,newHeight,null);
         g.dispose();
 
-        return NewImg;
+        return SizedImg;
     }
 
 

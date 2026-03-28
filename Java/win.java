@@ -47,7 +47,8 @@ public class win extends JPanel{
         bufferedImage = Downscaler.down(bufferedImage, Main.scale);
 
         // Vi ændre farve til sort-hvis
-        bufferedImage = GrayScaler.Gray(bufferedImage);
+       // bufferedImage = GrayScaler.Gray(bufferedImage);
+        bufferedImage = Quantization.color(bufferedImage);
 
 
         return bufferedImage;
