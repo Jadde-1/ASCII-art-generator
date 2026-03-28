@@ -12,11 +12,12 @@ public class win extends JPanel{
     public int imgwidth;
     public int imgheight;
 
-    String imgpath = "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg";
+    String imgpath = "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg";
     // Jasper path: "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
+    // J path 2: "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // Malik path: "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg"
     win(){
-        JFrame mainFrame = new JFrame("Blur");
+        JFrame mainFrame = new JFrame("ASCII Art Generator");
         mainFrame.setPreferredSize(new Dimension(width,height));
 
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
