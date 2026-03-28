@@ -43,8 +43,10 @@ public class win extends JPanel{
 
         imgwidth = bufferedImage.getWidth();
         imgheight = bufferedImage.getHeight();
+        //Vi scalere billedet til størrelse
+        bufferedImage = Downscaler.down(bufferedImage, Main.scale);
 
-        bufferedImage = Downscaler.down(bufferedImage, 2);
+        // Vi ændre farve til sort-hvis
         bufferedImage = GrayScaler.Gray(bufferedImage);
 
 
