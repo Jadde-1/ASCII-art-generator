@@ -12,7 +12,7 @@ public class win extends JPanel{
     public int imgwidth;
     public int imgheight;
 
-    String imgpath = "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg";
+    String imgpath = "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\Smile.png";
     // Jasper path: "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // J path 2: "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // Malik path: "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg"
@@ -47,9 +47,19 @@ public class win extends JPanel{
         bufferedImage = Downscaler.down(bufferedImage, Main.scale);
 
         // Vi ændre farve til sort-hvis
-       // bufferedImage = GrayScaler.Gray(bufferedImage);
-        bufferedImage = Quantization.color(bufferedImage);
+        if (Main.grey == 1) {
+            bufferedImage = GrayScaler.Gray(bufferedImage);
+        }
 
+        // Minsker antallet af farver.
+        bufferedImage = Quantization.color(bufferedImage, Main.bitAmount);
+
+        // ASCII til/fra
+        if (Main.ascii == 1) {
+            bufferedImage = Symbols.toAscii(bufferedImage);
+            imgwidth  = bufferedImage.getWidth();
+            imgheight = bufferedImage.getHeight();
+        }
 
         return bufferedImage;
     }
