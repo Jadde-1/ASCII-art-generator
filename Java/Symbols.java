@@ -38,11 +38,11 @@ public class Symbols {
         BufferedImage asciiImg = new BufferedImage(imgW * charWidth, imgH * charHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D ag = asciiImg.createGraphics();
 
-        ag.setColor(Color.BLACK);
-        ag.fillRect(0, 0, asciiImg.getWidth(), asciiImg.getHeight());
+        ag.setColor(Color.WHITE);
+       ag.fillRect(0, 0, asciiImg.getWidth(), asciiImg.getHeight());
 
         ag.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-        ag.setColor(Color.WHITE);
+        ag.setColor(Color.BLACK);
 
         for (int y = 0; y < imgH; y++) {
             for (int x = 0; x < imgW; x++) {

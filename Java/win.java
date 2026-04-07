@@ -12,7 +12,7 @@ public class win extends JPanel{
     public int imgwidth;
     public int imgheight;
 
-    String imgpath = "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\Smile.png";
+    String imgpath = "C:\\Github\\ASCII-art-generator\\Java\\smile2.jpg";
     // Jasper path: "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // J path 2: "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // Malik path: "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg"

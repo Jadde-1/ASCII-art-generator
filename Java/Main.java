@@ -5,7 +5,7 @@ public class Main {
     // 0 er normal size
     // Minus ganger op
     // Plus dividere
-    public static double scale = 8;
+    public static double scale = 50;
 
     // Jo færre farver jo lavere
     public static int bitAmount = 24;
@@ -14,13 +14,13 @@ public class Main {
     public static int text = 4;
 
     // Grey Yes = 1 else no
-    public static int grey = 1;
+    public static int grey = 0;
 
     // 1=ascii 0=normalt billede
     public static int ascii = 1;
 
     // Gør de brugte tegn større og mindre
-    public static int charScale = 1;
+    public static int charScale = 3;
 
     public static void main(String[] args) {
         new win();
