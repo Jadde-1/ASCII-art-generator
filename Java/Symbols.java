@@ -9,6 +9,7 @@ public class Symbols {
     static String mixed = "@#8&963Mhdb!i;:,. ";
     static String full = "@#$%&8BDMWZQOUYXmnhkdb][}{/|()Il!i;:~-,.\u200E ";
     static String blocks = "█ ▌▀■▄ \u200E";
+    static String rain = "▓ ▒ ░";
 
     public static String getCharset() {
         return switch (Main.text) {
@@ -17,6 +18,7 @@ public class Symbols {
             case 3 -> mixed;
             case 4 -> full;
             case 5 -> blocks;
+            case 6 -> rain;
             default -> full;
         };
     }

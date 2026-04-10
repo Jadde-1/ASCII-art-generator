@@ -5,10 +5,10 @@ public class Main {
     // 0 er normal size
     // Minus ganger op
     // Plus dividere
-    public static double scale = 8;
+    public static double scale = 13;
 
     // Jo færre farver jo lavere
-    public static int bitAmount = 24;
+    public static int bitAmount = 2;
 
     // Vælg pack af tegn
     public static int text = 5;

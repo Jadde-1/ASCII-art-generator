@@ -51,7 +51,7 @@ public class win extends JPanel{
             bufferedImage = GrayScaler.Gray(bufferedImage);
         }
 
-        // Minsker antallet af farver.
+        // Minsker antallet af farver.(i bit form)
         bufferedImage = Quantization.color(bufferedImage, Main.bitAmount);
 
         // ASCII til/fra
