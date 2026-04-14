@@ -12,7 +12,7 @@ public class win extends JPanel{
     public int imgwidth;
     public int imgheight;
 
-    String imgpath = "C:\\Github\\ASCII-art-generator\\Java\\smile2.jpg";
+    String imgpath = "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg";
     // Jasper path: "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // J path 2: "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // Malik path: "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg"
@@ -40,7 +40,7 @@ public class win extends JPanel{
 
     private Image createImage() throws IOException {
         BufferedImage bufferedImage = ImageIO.read(new File(imgpath));
-
+        System.out.println(bufferedImage);
         imgwidth = bufferedImage.getWidth();
         imgheight = bufferedImage.getHeight();
         //Vi scalere billedet til størrelse
@@ -61,6 +61,16 @@ public class win extends JPanel{
             imgheight = bufferedImage.getHeight();
         }
 
+        //Hvis vi ønsker at gemme billedet
+        if (Main.saveIMG) {
+            File outputFile = new File("C:\\Github\\ASCII-art-generator\\Java\\savedIMG.png");
+            ImageIO.write(bufferedImage, "png", outputFile);
+            System.out.println("Billede skrevet");
+            // https://www.geeksforgeeks.org/java/image-processing-in-java-read-and-write/
+        }
+
         return bufferedImage;
+
+
     }
 }

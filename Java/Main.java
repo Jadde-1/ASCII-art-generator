@@ -5,10 +5,10 @@ public class Main {
     // 0 er normal size
     // Minus ganger op
     // Plus dividere
-    public static double scale = 13;
-
+    public static double scale = 3;
+//13
     // Jo færre farver jo lavere
-    public static int bitAmount = 2;
+    public static int bitAmount = 24;
 
     // Vælg pack af tegn
     public static int text = 5;
@@ -20,7 +20,10 @@ public class Main {
     public static int ascii = 1;
 
     // Gør de brugte tegn større og mindre
-    public static int charScale = 2;
+    public static int charScale = 3;
+
+    //For at gemme bille tru
+    public static boolean saveIMG = true;
 
     public static void main(String[] args) {
         new win();
