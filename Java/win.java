@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,7 +25,18 @@ public class win extends JPanel{
         mainFrame.add(this);
         mainFrame.setVisible(true);
 
+        JLabel l = new JLabel("test label");
+
+        //Buttons
+        JButton b = new JButton("Toggle ASCII");
+
         mainFrame.pack();
+
+        JPanel border = new JPanel(new BorderLayout());
+
+        //border.add(mainFrame, BorderLayout.WEST);
+        border.add(b, BorderLayout.EAST);
+
     }
 
     public void paint(Graphics g) {
@@ -74,3 +86,5 @@ public class win extends JPanel{
 
     }
 }
+// udvid moscow
+// tilføj omkirng test af modkow funktioner
