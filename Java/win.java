@@ -20,6 +20,16 @@ public class win extends JPanel{
     public boolean ASCII = true;
     public boolean GreyScale = true;
 
+    // Top buttons
+    static JButton importBtn, exportImgBtn;
+    // Sliders
+    static JSlider scaleSlider, bitAmountSlider, charQuality;
+    // Checkboxes
+    static JCheckBox asciiCheck, greyCheck;
+    // Dropdowns
+    static JComboBox<String> charTypeDropdown, fontDropdown, fontStyleDropdown;
+
+    static JLabel imageLabel;
 
     public int imgwidth;
     public int imgheight;
@@ -28,36 +38,113 @@ public class win extends JPanel{
     static JButton b, b1, b2;
     static JLabel l;
 
-    String imgpath = "C:\\Github\\ASCII-art-generator\\Java\\doge.png";
+    static File currentImageFile = null;
+    BufferedImage originalImage = null;
+    BufferedImage displayImage = null;
+
+    String imgpath = "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\doge.png";
     // Jasper path: "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // J path 2: "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // Malik path: "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg"
     win(){
-        f = new JFrame("ASCII Art Generator");
+        JFrame frame = new JFrame("ASCII Art Generator");
+        frame.setPreferredSize(new Dimension(width,height));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(true);
 
-        l = new JLabel("test label");
-        //Buttons
-        b = new JButton("Toggle ASCII");
-        b1 = new JButton("Toggle ASCII2");
+        // Main container
+        JPanel mainPanel = new JPanel(new BorderLayout(0, 0));
+        mainPanel.setBackground(Color.gray);
 
-        JPanel p = new JPanel();
+        // TOP PANEL - Buttons
+        JPanel topPanel = createTopPanel();
+        topPanel.setPreferredSize(new Dimension(width, 60));
 
-        p.add(l);
-        p.add(this);
-        p.add(b);
-        p.add(b1);
+        // LEFT PANEL - Controls
+        JPanel leftPanel = createControlPanel();
+        leftPanel.setPreferredSize(new Dimension(350, height));
 
-        f.setVisible(true);
-        f.setPreferredSize(new Dimension(width,height));
-
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.pack();
-
-        JPanel border = new JPanel(new BorderLayout());
-
-
-
+        JPanel rightPanel = createImagePanel();
     }
+
+    private JPanel createTopPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panel.setBackground(new Color(220, 220, 220));
+
+
+        // Import det billede man vil konvertere
+        importBtn = new JButton("Import Image");
+        importBtn.setFont(new Font("Arial", Font.PLAIN, 12));
+        importBtn.setBackground(new Color(0, 0, 0));
+        importBtn.setForeground(Color.WHITE);
+        importBtn.setFocusPainted(false);
+        importBtn.setMargin(new Insets(8, 15, 8, 15));
+        importBtn.addActionListener(e -> importImage());
+        panel.add(importBtn);
+
+        // Export Image
+        exportImgBtn = new JButton("Export Image");
+        exportImgBtn.setFont(new Font("Arial", Font.PLAIN, 12));
+        exportImgBtn.setBackground(new Color(0, 0, 0));
+        exportImgBtn.setForeground(Color.WHITE);
+        exportImgBtn.setFocusPainted(false);
+        exportImgBtn.setMargin(new Insets(8, 15, 8, 15));
+        //exportImgBtn.addActionListener(e -> exportImage());
+        panel.add(exportImgBtn);
+
+
+        return panel;
+    }
+
+    private JPanel createControlPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(128, 128, 128));
+
+        return panel;
+    }
+
+    private JPanel createImagePanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.blue);
+        panel.setLayout(new BorderLayout());
+
+
+        imageLabel = new JLabel("Drag and drop an image here or use Import button", SwingConstants.CENTER);
+        imageLabel.setBackground(new Color(192, 192, 192));
+        imageLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+        imageLabel.setForeground(new Color(120, 120, 120));
+        panel.add(imageLabel, BorderLayout.CENTER);
+
+        //setupDragAndDrop(panel);
+
+        return panel;
+    }
+
+    private void importImage() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                "Image Files", "png", "jpg", "jpeg", "gif", "bmp"));
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            loadImage(fileChooser.getSelectedFile());
+        }
+    }
+
+    private void loadImage(File file) {
+            currentImageFile = file;
+        try {
+            originalImage = ImageIO.read(file);
+            // Skal også opdatere ellers kaster den fejl hvis der ikke er noget bilelde at loade
+            //updatePreview();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void paint(Graphics g) {
         Image img = null;

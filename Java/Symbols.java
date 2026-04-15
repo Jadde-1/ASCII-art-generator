@@ -2,14 +2,20 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Symbols {
-    // Forskellige tegnsæt fra mørk til lys
-    // Vi skal have flere symbols
     static String letters = "@#MBDOQUYXZmnhkdb][}{/|() Il!i;:,.";
     static String numbers = "8963021745 ";
     static String mixed = "@#8&963Mhdb!i;:,. ";
     static String full = "@#$%&8BDMWZQOUYXmnhkdb][}{/|()Il!i;:~-,.\u200E ";
     static String blocks = "█ ▌▀■▄ \u200E";
     static String rain = "▓ ▒ ░";
+
+    static String fontName = "Monospaced";
+    static int fontStyle = Font.PLAIN;
+
+    public static void setFont(String name, int style) {
+        fontName = name;
+        fontStyle = style;
+    }
 
     public static String getCharset() {
         return switch (Main.text) {
@@ -25,7 +31,6 @@ public class Symbols {
 
     public static char getChar(int brightness) {
         String charset = getCharset();
-        // Vend brightness om så 0=lys tegn og 255=mørk tegn
         int invertedBrightness = 255 - brightness;
         int index = (int)((invertedBrightness / 255.0) * (charset.length() - 1));
         return charset.charAt(index);
@@ -43,10 +48,10 @@ public class Symbols {
         Graphics2D ag = asciiImg.createGraphics();
 
         ag.setColor(Color.WHITE);
-       ag.fillRect(0, 0, asciiImg.getWidth(), asciiImg.getHeight());
-
-        ag.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-        ag.setColor(new Color(190,149,70));
+        ag.fillRect(0, 0, asciiImg.getWidth(), asciiImg.getHeight());
+        // Vi har her mulighed for at ændre font name og stil og størrelse
+        ag.setFont(new Font(fontName, fontStyle, fontSize));
+        ag.setColor(new Color(190, 149, 70));
 
         for (int y = 0; y < imgH; y++) {
             for (int x = 0; x < imgW; x++) {

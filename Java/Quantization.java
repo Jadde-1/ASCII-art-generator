@@ -27,5 +27,7 @@ public class Quantization {
     }
 }
 
+// KODEN SKAL OPDATERES den kan ikke vælge antqal af faktiske farver kun bit 2^n i geuss
+
 // Soruces
 // 1. https://en.wikipedia.org/wiki/Color_quantization
