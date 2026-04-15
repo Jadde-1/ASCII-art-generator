@@ -5,13 +5,13 @@ public class Main {
     // 0 er normal size
     // Minus ganger op
     // Plus dividere
-    public static double scale = 16;
+    public static double scale = 20;
 //13
     // Jo færre farver jo lavere
     public static int bitAmount = 24;
 
     // Vælg pack af tegn
-    public static int text = 3;
+    public static int text = 1;
 
     // Grey Yes = 1 else no
     public static int grey = 1;

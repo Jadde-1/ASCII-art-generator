@@ -46,7 +46,7 @@ public class Symbols {
        ag.fillRect(0, 0, asciiImg.getWidth(), asciiImg.getHeight());
 
         ag.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-        ag.setColor(Color.BLACK);
+        ag.setColor(new Color(190,149,70));
 
         for (int y = 0; y < imgH; y++) {
             for (int x = 0; x < imgW; x++) {

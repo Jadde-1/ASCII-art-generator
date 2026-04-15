@@ -10,32 +10,52 @@ public class win extends JPanel{
     int height = 1000;
     int width = 800;
 
+    // Custom shit to change or dang variaubuls
+    public double scale = 0;
+    public int colors = 24; //to be used
+    public  int bitAmount = 24;
+    public int text = 1;
+    public int charScale = 3;
+    public boolean saveIMG = true;
+    public boolean ASCII = true;
+    public boolean GreyScale = true;
+
+
     public int imgwidth;
     public int imgheight;
 
-    String imgpath = "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg";
+    static JFrame f;
+    static JButton b, b1, b2;
+    static JLabel l;
+
+    String imgpath = "C:\\Github\\ASCII-art-generator\\Java\\doge.png";
     // Jasper path: "C:\\Github\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // J path 2: "C:\\Users\\Vrill\\Documents\\GitHub\\ASCII-art-generator\\Java\\TEST-IMG.jpg"
     // Malik path: "C:\\Users\\malik\\IdeaProjects\\ASCII\\src\\L-1253-00-000003-wpu.jpg"
     win(){
-        JFrame mainFrame = new JFrame("ASCII Art Generator");
-        mainFrame.setPreferredSize(new Dimension(width,height));
+        f = new JFrame("ASCII Art Generator");
 
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.add(this);
-        mainFrame.setVisible(true);
-
-        JLabel l = new JLabel("test label");
-
+        l = new JLabel("test label");
         //Buttons
-        JButton b = new JButton("Toggle ASCII");
+        b = new JButton("Toggle ASCII");
+        b1 = new JButton("Toggle ASCII2");
 
-        mainFrame.pack();
+        JPanel p = new JPanel();
+
+        p.add(l);
+        p.add(this);
+        p.add(b);
+        p.add(b1);
+
+        f.setVisible(true);
+        f.setPreferredSize(new Dimension(width,height));
+
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.pack();
 
         JPanel border = new JPanel(new BorderLayout());
 
-        //border.add(mainFrame, BorderLayout.WEST);
-        border.add(b, BorderLayout.EAST);
+
 
     }
 
