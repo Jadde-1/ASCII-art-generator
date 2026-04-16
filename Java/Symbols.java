@@ -9,6 +9,7 @@ public class Symbols {
     static String blocks = "█ ▌▀■▄ \u200E";
     static String rain = "▓ ▒ ░";
 
+
     static String fontName = "Monospaced";
     static int fontStyle = Font.PLAIN;
 
@@ -36,7 +37,7 @@ public class Symbols {
         return charset.charAt(index);
     }
 
-    public static BufferedImage toAscii(BufferedImage bufferedImage) {
+    public BufferedImage toAscii(BufferedImage bufferedImage) {
         int imgW = bufferedImage.getWidth();
         int imgH = bufferedImage.getHeight();
 
@@ -51,7 +52,8 @@ public class Symbols {
         ag.fillRect(0, 0, asciiImg.getWidth(), asciiImg.getHeight());
         // Vi har her mulighed for at ændre font name og stil og størrelse
         ag.setFont(new Font(fontName, fontStyle, fontSize));
-        ag.setColor(new Color(190, 149, 70));
+        // Problemer med statis reference to non static call - What the fix?
+        ag.setColor(new Color(win.Rrgb, win.Brgb, win.Grgb));
 
         for (int y = 0; y < imgH; y++) {
             for (int x = 0; x < imgW; x++) {
@@ -61,7 +63,7 @@ public class Symbols {
                 ag.drawString(String.valueOf(asciiChar), x * charWidth, y * charHeight + charHeight);
             }
         }
-
+        // Sletter ting vi ikke bruger i Memory
         ag.dispose();
         return asciiImg;
     }

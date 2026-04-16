@@ -22,8 +22,8 @@ public class Main {
     // Gør de brugte tegn større og mindre
     public static int charScale = 3;
 
-    //For at gemme bille tru
-    public static boolean saveIMG = true;
+
+
 
     public static void main(String[] args) {
         new win();
