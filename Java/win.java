@@ -13,9 +13,10 @@ public class win extends JFrame {
     int height = 850;
     int width = 1600;
 
+    // Gør felterne statiske
     public static int Rrgb = 0;
-    public int Grgb = 0;
-    public int Brgb = 0;
+    public static int Grgb = 0;
+    public static int Brgb = 0;
 
     // Top buttons
     static JButton importBtn, exportImgBtn, exportTxtBtn, copyClipboardBtn;
@@ -164,22 +165,57 @@ public class win extends JFrame {
 
         // RGB variabler der kan ændres
 
-        RrgbField = new JTextField(getRrgb());
-        RrgbField.setMaximumSize(new Dimension(60, 25));
+// R felt
+        JLabel rLabel = new JLabel("R (0-255):");
+        rLabel.setForeground(Color.RED);
+        panel.add(rLabel);
+        RrgbField = new JTextField(String.valueOf(Rrgb));
+        RrgbField.setMaximumSize(new Dimension(330, 25));
+        // Document lisenter kan bruges så den henter værdien ved hver tast hvorimod actionlisenter kun ved enter-knappen
+        RrgbField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            void tryUpdate() {
+                try { Rrgb = Math.max(0, Math.min(255, Integer.parseInt(RrgbField.getText().trim()))); updatePreviewLive(); }
+                catch (NumberFormatException ex) {}
+            }
+        });
         panel.add(RrgbField);
-        RrgbField.setColumns(3);
 
-
-        GrgbField = new JTextField(Grgb);
-        GrgbField.setMaximumSize(new Dimension(60, 25));
+// G felt
+        JLabel gLabel = new JLabel("G (0-255):");
+        gLabel.setForeground(new Color(0, 180, 0));
+        panel.add(gLabel);
+        GrgbField = new JTextField(String.valueOf(Grgb));
+        GrgbField.setMaximumSize(new Dimension(330, 25));
+        GrgbField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            void tryUpdate() {
+                try { Grgb = Math.max(0, Math.min(255, Integer.parseInt(GrgbField.getText().trim()))); updatePreviewLive(); }
+                catch (NumberFormatException ex) {}
+            }
+        });
         panel.add(GrgbField);
-        GrgbField.setColumns(3);
 
-
-        BrgbField = new JTextField(Brgb);
-        BrgbField.setMaximumSize(new Dimension(60, 25));
+// B felt
+        JLabel bLabel = new JLabel("B (0-255):");
+        bLabel.setForeground(new Color(60, 120, 255));
+        panel.add(bLabel);
+        BrgbField = new JTextField(String.valueOf(Brgb));
+        BrgbField.setMaximumSize(new Dimension(330, 25));
+        BrgbField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            void tryUpdate() {
+                try { Brgb = Math.max(0, Math.min(255, Integer.parseInt(BrgbField.getText().trim()))); updatePreviewLive(); }
+                catch (NumberFormatException ex) {}
+            }
+        });
         panel.add(BrgbField);
-        BrgbField.setColumns(3);
 
         return panel;
     }

@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+
 public class Symbols {
     static String letters = "@#MBDOQUYXZmnhkdb][}{/|() Il!i;:,.";
     static String numbers = "8963021745 ";
@@ -37,7 +38,7 @@ public class Symbols {
         return charset.charAt(index);
     }
 
-    public BufferedImage toAscii(BufferedImage bufferedImage) {
+    public static BufferedImage toAscii(BufferedImage bufferedImage) {
         int imgW = bufferedImage.getWidth();
         int imgH = bufferedImage.getHeight();
 
@@ -53,7 +54,7 @@ public class Symbols {
         // Vi har her mulighed for at ændre font name og stil og størrelse
         ag.setFont(new Font(fontName, fontStyle, fontSize));
         // Problemer med statis reference to non static call - What the fix?
-        ag.setColor(new Color(win.Rrgb, win.Brgb, win.Grgb));
+        ag.setColor(new Color(win.Rrgb, win.Grgb, win.Brgb));
 
         for (int y = 0; y < imgH; y++) {
             for (int x = 0; x < imgW; x++) {
