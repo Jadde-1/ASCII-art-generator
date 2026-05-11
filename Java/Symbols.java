@@ -19,6 +19,16 @@ public class Symbols {
         fontStyle = style;
     }
 
+    // Konverterer dropdown-indeks til Java Font-stil konstant
+    public static int getFontStyle(int dropdownIndex) {
+        return switch (dropdownIndex) {
+            case 1 -> Font.BOLD;
+            case 2 -> Font.ITALIC;
+            case 3 -> Font.BOLD | Font.ITALIC;
+            default -> Font.PLAIN; // 0 = Normal, 4 = Thin (også PLAIN)
+        };
+    }
+
     public static String getCharset() {
         return switch (Main.text) {
             case 1 -> letters;

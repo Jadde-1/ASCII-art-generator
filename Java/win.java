@@ -449,11 +449,5 @@ public class win extends JFrame {
                 name.endsWith(".bmp") || name.endsWith(".webp");
     }
 
-    public int getRrgb() {
-        return Rrgb;
-    }
 
-    public void setRrgb(int rrgb) {
-        Rrgb = rrgb;
-    }
 }

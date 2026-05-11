@@ -1,6 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
+// Pas på store billedere vi er hurtigt ude af mem hvis vi prøver at bruge mange bit
 public class Quantization {
     public static BufferedImage color(BufferedImage bufferedImage, int bitAmount) {
         int imgwidth = bufferedImage.getWidth();
