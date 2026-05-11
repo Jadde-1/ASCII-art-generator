@@ -2,35 +2,32 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class win extends JFrame {
     int height = 850;
     int width = 1600;
 
-    // Gør felterne statiske
+    // Tekstfarve på ASCII-tegn (RGB)
     public static int Rrgb = 0;
     public static int Grgb = 0;
     public static int Brgb = 0;
 
     // Top buttons
-    static JButton importBtn, exportImgBtn, exportTxtBtn, copyClipboardBtn;
+    static JButton importBtn, exportImgBtn;
     // Sliders
     static JSlider scaleSlider, bitAmountSlider, charScaleSlider;
     // Checkboxes
     static JCheckBox asciiCheck, greyCheck;
     // Dropdowns
     static JComboBox<String> charTypeDropdown, fontDropdown, fontStyleDropdown;
-
+    // RGB tekstfelter
     public static JTextField RrgbField, BrgbField, GrgbField;
+
     static JLabel imageLabel;
 
-    static File currentImageFile = null;
     BufferedImage originalImage = null;
     BufferedImage displayImage = null;
 
@@ -38,11 +35,6 @@ public class win extends JFrame {
         this.setTitle("ASCII Art Generator");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Problem det starter ikke i midten af skærmen som det burde
-        // https://www.tutorialspoint.com/article/how-to-display-a-jframe-to-the-center-of-a-screen-in-java
-
-
-        // Color scheme
         Color bgColor = new Color(240, 240, 240);
         Color panelColor = new Color(250, 250, 250);
         Color accentColor = new Color(60, 120, 180);
@@ -50,19 +42,15 @@ public class win extends JFrame {
         UIManager.put("Panel.background", bgColor);
         UIManager.put("Label.foreground", new Color(50, 50, 50));
 
-        // Main container
         JPanel mainPanel = new JPanel(new BorderLayout(0, 0));
         mainPanel.setBackground(bgColor);
 
-        // TOP PANEL - Buttons
-        JPanel topPanel = createTopPanel(accentColor);
+        JPanel topPanel = createTopPanel();
         topPanel.setPreferredSize(new Dimension(width, 60));
 
-        // LEFT PANEL - Controls
-        JPanel leftPanel = createControlPanel(accentColor, panelColor);
+        JPanel leftPanel = createControlPanel();
         leftPanel.setPreferredSize(new Dimension(350, height));
 
-        // RIGHT PANEL - Image Preview
         JPanel rightPanel = createImagePanel(panelColor);
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -72,158 +60,106 @@ public class win extends JFrame {
         getContentPane().add(mainPanel);
         this.setPreferredSize(new Dimension(width, height));
         this.setResizable(true);
-
         this.pack();
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null); // Centrerer vinduet på skærmen
         this.setVisible(true);
     }
 
-    private JPanel createTopPanel(Color accentColor) {
+    private JPanel createTopPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         panel.setBackground(new Color(220, 220, 220));
 
-        // Import
         importBtn = new JButton("Import Image");
-        importBtn.setFont(new Font("Arial", Font.PLAIN, 12));
-        importBtn.setBackground(new Color(0, 0, 0));
-        importBtn.setForeground(Color.WHITE);
-        importBtn.setFocusPainted(false);
-        importBtn.setMargin(new Insets(8, 15, 8, 15));
+        styleButton(importBtn);
         importBtn.addActionListener(e -> importImage());
         panel.add(importBtn);
 
-        // Export Image
         exportImgBtn = new JButton("Export Image");
-        exportImgBtn.setFont(new Font("Arial", Font.PLAIN, 12));
-        exportImgBtn.setBackground(new Color(0, 0, 0));
-        exportImgBtn.setForeground(Color.WHITE);
-        exportImgBtn.setFocusPainted(false);
-        exportImgBtn.setMargin(new Insets(8, 15, 8, 15));
+        styleButton(exportImgBtn);
         exportImgBtn.addActionListener(e -> exportImage());
         panel.add(exportImgBtn);
+
         return panel;
     }
 
-    private JPanel createControlPanel(Color accentColor, Color panelColor) {
+    private void styleButton(JButton btn) {
+        btn.setFont(new Font("Arial", Font.PLAIN, 12));
+        btn.setBackground(new Color(0, 0, 0));
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setMargin(new Insets(8, 15, 8, 15));
+    }
+
+    private JPanel createControlPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(15, 15, 15, 15));
         panel.setBackground(new Color(128, 128, 128));
 
-        // Title
         JLabel titleLabel = new JLabel("Settings");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setForeground(new Color(0, 0, 0));
         panel.add(titleLabel);
 
-        // Scale
-        panel.add(createLabeledSlider("Scale:", scaleSlider = new JSlider(0, 50, (int) Main.scale),
-                e -> updatePreviewLive()));
+        // Scale slider — opdater kun når slideren slippes
+        scaleSlider = new JSlider(0, 50, (int) Main.scale);
+        panel.add(createLabeledSlider("Scale:", scaleSlider));
         scaleSlider.setBackground(new Color(128, 128, 128));
 
-        // Bit Amount - https://en.wikipedia.org/wiki/Color_depth
-        panel.add(createLabeledSlider("Colors (Bit Amount):", bitAmountSlider = new JSlider(2, 32, Main.bitAmount),
-                e -> updatePreviewLive()));
+        // Bit Amount slider
+        bitAmountSlider = new JSlider(2, 24, Main.bitAmount);
+        panel.add(createLabeledSlider("Colors (Bit Amount):", bitAmountSlider));
         bitAmountSlider.setBackground(new Color(128, 128, 128));
 
-        // Grayscale Checkbox
-        greyCheck = new JCheckBox("Grayscale", Main.grey == 1);
+        // Grayscale checkbox
+        greyCheck = new JCheckBox("Grayscale", Main.grey);
         greyCheck.setAlignmentX(Component.CENTER_ALIGNMENT);
         greyCheck.setBackground(new Color(128, 128, 128));
         greyCheck.setMaximumSize(new Dimension(330, 25));
         greyCheck.addActionListener(e -> updatePreviewLive());
         panel.add(greyCheck);
 
-        // ASCII Mode
-        asciiCheck = new JCheckBox("Enable ASCII Mode", Main.ascii == 1);
+        // ASCII mode checkbox
+        asciiCheck = new JCheckBox("Enable ASCII Mode", Main.ascii);
         asciiCheck.setAlignmentX(Component.CENTER_ALIGNMENT);
         asciiCheck.setBackground(new Color(128, 128, 128));
         asciiCheck.setMaximumSize(new Dimension(330, 25));
         asciiCheck.addActionListener(e -> updatePreviewLive());
         panel.add(asciiCheck);
 
-        // Character Scale
-        panel.add(createLabeledSlider("Character Quality:", charScaleSlider = new JSlider(1, 10, Main.charScale),
-                e -> updatePreviewLive()));
+        // Character scale slider
+        charScaleSlider = new JSlider(1, 10, Main.charScale);
+        panel.add(createLabeledSlider("Character Quality:", charScaleSlider));
         charScaleSlider.setBackground(new Color(128, 128, 128));
 
-        // Character Type
+        // Character type dropdown
         String[] charTypes = {"Letters", "Numbers", "Mixed", "Full", "Blocks", "Rain"};
         charTypeDropdown = createDropdown("Character Type:", charTypes, Main.text - 1);
         charTypeDropdown.addActionListener(e -> updatePreviewLive());
         panel.add(charTypeDropdown.getParent());
 
-        // Font Selection
+        // Font dropdown
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         fontDropdown = createDropdown("Font:", fonts, 0);
         fontDropdown.addActionListener(e -> updatePreviewLive());
         panel.add(fontDropdown.getParent());
 
-        // Font Style
-        String[] styles = {"Normal", "Bold", "Italic", "Bold Italic", "Thin"};
+        // Font style dropdown
+        String[] styles = {"Normal", "Bold", "Italic", "Bold Italic"};
         fontStyleDropdown = createDropdown("Style:", styles, 0);
         fontStyleDropdown.addActionListener(e -> updatePreviewLive());
         panel.add(fontStyleDropdown.getParent());
 
-        // RGB variabler der kan ændres
-
-// R felt
-        JLabel rLabel = new JLabel("R (0-255):");
-        rLabel.setForeground(Color.RED);
-        panel.add(rLabel);
-        RrgbField = new JTextField(String.valueOf(Rrgb));
-        RrgbField.setMaximumSize(new Dimension(330, 25));
-        // Document lisenter kan bruges så den henter værdien ved hver tast hvorimod actionlisenter kun ved enter-knappen
-        RrgbField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            void tryUpdate() {
-                try { Rrgb = Math.max(0, Math.min(255, Integer.parseInt(RrgbField.getText().trim()))); updatePreviewLive(); }
-                catch (NumberFormatException ex) {}
-            }
-        });
-        panel.add(RrgbField);
-
-// G felt
-        JLabel gLabel = new JLabel("G (0-255):");
-        gLabel.setForeground(new Color(0, 180, 0));
-        panel.add(gLabel);
-        GrgbField = new JTextField(String.valueOf(Grgb));
-        GrgbField.setMaximumSize(new Dimension(330, 25));
-        GrgbField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            void tryUpdate() {
-                try { Grgb = Math.max(0, Math.min(255, Integer.parseInt(GrgbField.getText().trim()))); updatePreviewLive(); }
-                catch (NumberFormatException ex) {}
-            }
-        });
-        panel.add(GrgbField);
-
-// B felt
-        JLabel bLabel = new JLabel("B (0-255):");
-        bLabel.setForeground(new Color(60, 120, 255));
-        panel.add(bLabel);
-        BrgbField = new JTextField(String.valueOf(Brgb));
-        BrgbField.setMaximumSize(new Dimension(330, 25));
-        BrgbField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
-            void tryUpdate() {
-                try { Brgb = Math.max(0, Math.min(255, Integer.parseInt(BrgbField.getText().trim()))); updatePreviewLive(); }
-                catch (NumberFormatException ex) {}
-            }
-        });
-        panel.add(BrgbField);
-
+        // RGB felter
+        panel.add(createRgbField("R (0-255):", Color.RED, "R"));
+        panel.add(createRgbField("G (0-255):", new Color(0, 180, 0), "G"));
+        panel.add(createRgbField("B (0-255):", new Color(60, 120, 255), "B"));
         return panel;
     }
 
-    private JPanel createLabeledSlider(String labelText, JSlider slider, javax.swing.event.ChangeListener listener) {
+    // Slider der kun opdaterer når man slipper
+    private JPanel createLabeledSlider(String labelText, JSlider slider) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(128, 128, 128));
         panel.setMaximumSize(new Dimension(330, 60));
@@ -237,8 +173,13 @@ public class win extends JFrame {
         slider.setPaintLabels(true);
         slider.setMajorTickSpacing(slider.getMaximum() / 5);
         slider.setBackground(new Color(250, 250, 250));
-        slider.addChangeListener(listener);
 
+        // Kun opdater når slideren slippes, ikke ved hvert lille træk
+        slider.addChangeListener(e -> {
+            if (!slider.getValueIsAdjusting()) {
+                updatePreviewLive();
+            }
+        });
         panel.add(label, BorderLayout.NORTH);
         panel.add(slider, BorderLayout.CENTER);
         return panel;
@@ -255,199 +196,159 @@ public class win extends JFrame {
         label.setPreferredSize(new Dimension(100, 25));
 
         JComboBox<String> dropdown = new JComboBox<>();
-        for (Object item : items) {
-            dropdown.addItem(item.toString());
-        }
+        for (Object item : items) dropdown.addItem(item.toString());
         dropdown.setSelectedIndex(Math.min(selectedIndex, items.length - 1));
         dropdown.setMaximumSize(new Dimension(200, 25));
 
         panel.add(label, BorderLayout.WEST);
         panel.add(dropdown, BorderLayout.CENTER);
-
-        // Store reference for later access
         panel.putClientProperty("dropdown", dropdown);
         return dropdown;
     }
 
-    private JPanel createImagePanel(Color panelColor) {
-        JPanel panel = new JPanel();
-        panel.setBackground(panelColor);
-        panel.setLayout(new BorderLayout());
+    // Hjælpemetode så RGB-felterne ikke er kopieret 3 gange
+    private JTextField createRgbField(String labelText, Color labelColor, String channel) {
+        JLabel label = new JLabel(labelText);
+        label.setForeground(labelColor);
 
-        imageLabel = new JLabel("Drag and drop an image here or use Import button", SwingConstants.CENTER);
-        imageLabel.setBackground(new Color(192, 192, 192));
+        JTextField field = new JTextField("0");
+        field.setMaximumSize(new Dimension(330, 25));
+
+        // Document listener opdaterer ved hvert tastetryk
+        field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                tryUpdate();
+            }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                tryUpdate();
+            }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                tryUpdate();
+            }
+            void tryUpdate() {
+
+                    int val = Math.max(0, Math.min(255, Integer.parseInt(field.getText().trim())));
+                    switch (channel) {
+                        case "R" -> {
+                            Rrgb = val; RrgbField = field;
+                        }
+                        case "G" -> {
+                            Grgb = val; GrgbField = field;
+                        }
+                        case "B" -> {
+                            Brgb = val; BrgbField = field;
+                        }
+                    }
+                    updatePreviewLive();
+
+            }
+        });
+
+        // Returnér kun feltet — tilføj label+felt til panel
+        JPanel wrapper = new JPanel();
+        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
+        wrapper.setBackground(new Color(128, 128, 128));
+        wrapper.setMaximumSize(new Dimension(330, 50));
+        wrapper.add(label);
+        wrapper.add(field);
+        return field; // bruges ikke direkte, men wrapper tilføjes nedenfor
+    }
+
+    private JPanel createImagePanel(Color panelColor) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(panelColor);
+
+        imageLabel = new JLabel("Import et billede med knappen i  venstre hjørne", SwingConstants.CENTER);
         imageLabel.setFont(new Font("Arial", Font.ITALIC, 14));
         imageLabel.setForeground(new Color(120, 120, 120));
         panel.add(imageLabel, BorderLayout.CENTER);
-
-        setupDragAndDrop(panel);
-
         return panel;
-    }
-
-    private void setupDragAndDrop(JPanel panel) {
-        DropTarget dropTarget = new DropTarget(panel, new DropTargetAdapter() {
-            public void drop(DropTargetDropEvent dtde) {
-                try {
-                    dtde.acceptDrop(DnDConstants.ACTION_COPY);
-                    @SuppressWarnings("unchecked")
-                    List<File> droppedFiles = (List<File>) dtde.getTransferable()
-                            .getTransferData(DataFlavor.javaFileListFlavor);
-
-                    if (!droppedFiles.isEmpty()) {
-                        File file = droppedFiles.get(0);
-                        if (isImageFile(file)) {
-                            loadImage(file);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     private void importImage() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
-                "Image Files", "png", "jpg", "jpeg", "gif", "bmp"));
-
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            loadImage(fileChooser.getSelectedFile());
-        }
-    }
-
-    private void loadImage(File file) {
-        try {
-            currentImageFile = file;
-            originalImage = ImageIO.read(file);
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                originalImage = ImageIO.read(fileChooser.getSelectedFile());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             updatePreviewLive();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-
     }
 
     private void updatePreviewLive() {
         if (originalImage == null) return;
-
-        SwingWorker<BufferedImage, Void> worker = new SwingWorker<BufferedImage, Void>() {
-            @Override
-            protected BufferedImage doInBackground() throws Exception {
-                return processImage(originalImage);
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    displayImage = get();
-                    showPreview(displayImage);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
-        worker.execute();
+        try {
+            displayImage = processImage(originalImage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        showPreview(displayImage);
     }
 
     private void showPreview(BufferedImage img) {
-        if (img != null) {
-            int maxWidth = 1000;
-            int maxHeight = 700;
-
-            double scale = Math.min((double) maxWidth / img.getWidth(),
-                    (double) maxHeight / img.getHeight());
-
-            int previewWidth = (int) (img.getWidth() * scale);
-            int previewHeight = (int) (img.getHeight() * scale);
-
-            Image scaledImage = img.getScaledInstance(previewWidth, previewHeight, Image.SCALE_SMOOTH);
-            ImageIcon icon = new ImageIcon(scaledImage);
-            imageLabel.setIcon(icon);
-            imageLabel.setText(null);
-        }
+        if (img == null) return;
+        int maxWidth = 1000;
+        int maxHeight = 700;
+        double scale = Math.min((double) maxWidth / img.getWidth(), (double) maxHeight / img.getHeight());
+        int pw = (int) (img.getWidth() * scale);
+        int ph = (int) (img.getHeight() * scale);
+        imageLabel.setIcon(new ImageIcon(img.getScaledInstance(pw, ph, Image.SCALE_SMOOTH)));
+        imageLabel.setText(null);
     }
 
     private void exportImage() {
         if (displayImage == null) {
             return;
         }
-
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File("ascii_art.png"));
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PNG Files", "png"));
-
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-
+            File file = fileChooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(".png"))
+                file = new File(file.getAbsolutePath() + ".png");
             try {
-                ImageIO.write(displayImage, "png", fileChooser.getSelectedFile());
+                ImageIO.write(displayImage, "png", file);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-
         }
     }
 
-
-
-
     private BufferedImage processImage(BufferedImage img) throws IOException {
-        BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(),
-                BufferedImage.TYPE_INT_RGB);
+        // Kopier originalbilledet så vi ikke ændrer det
+        BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
         result.getGraphics().drawImage(img, 0, 0, null);
 
+        // Læs indstillinger fra GUI til Main
         Main.scale = scaleSlider.getValue();
         Main.bitAmount = bitAmountSlider.getValue();
         Main.charScale = charScaleSlider.getValue();
         Main.text = charTypeDropdown.getSelectedIndex() + 1;
-        Main.ascii = asciiCheck.isSelected() ? 1 : 0;
-        Main.grey = greyCheck.isSelected() ? 1 : 0;
-
+        Main.ascii = asciiCheck.isSelected(); // boolean
+        Main.grey = greyCheck.isSelected(); // boolean
         result = Downscaler.down(result, Main.scale);
 
-        if (Main.grey == 1) {
+        if (Main.grey) {
             result = GrayScaler.Gray(result);
         }
-
         result = Quantization.color(result, Main.bitAmount);
 
-        if (Main.ascii == 1) {
-            // Update font before converting to ASCII
+        if (Main.ascii) {
             String fontName = fontDropdown.getSelectedItem().toString();
-            int fontStyle = getFontStyle();
+            int fontStyle = switch (fontStyleDropdown.getSelectedIndex()) {
+                case 1 -> Font.BOLD;
+                case 2 -> Font.ITALIC;
+                case 3 -> Font.BOLD | Font.ITALIC;
+                default -> Font.PLAIN;
+            };
             Symbols.setFont(fontName, fontStyle);
-
             result = Symbols.toAscii(result);
         }
-
         return result;
     }
-
-    private int getFontStyle() {
-        int style = switch (fontStyleDropdown.getSelectedIndex()) {
-            case 1 -> Font.BOLD;
-            case 2 -> Font.ITALIC;
-            case 3 -> Font.BOLD | Font.ITALIC;
-            default -> Font.PLAIN;
-        };
-
-        // Handle thin font (using PLAIN with smaller size)
-        if (fontStyleDropdown.getSelectedIndex() == 4) {
-            style = Font.PLAIN;
-        }
-
-        return style;
-    }
-
-    private boolean isImageFile(File file) {
-        String name = file.getName().toLowerCase();
-        return name.endsWith(".png") || name.endsWith(".jpg") ||
-                name.endsWith(".jpeg") || name.endsWith(".gif") ||
-                name.endsWith(".bmp") || name.endsWith(".webp");
-    }
-
-
 }

@@ -1,29 +1,24 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    // scaler billedet mere eller mindre
-    // 0 er normal size
-    // Minus ganger op
-    // Plus dividere
+    // Scaler billedet op eller ned
+    // Høj værdi = mindre billede
     public static double scale = 20;
-//13
+
     // Jo færre farver jo lavere
     public static int bitAmount = 24;
 
-    // Vælg pack af tegn
+    // Vælg pack af tegn (1-6)
     public static int text = 1;
 
-    // Grey Yes = 1 else no
-    public static int grey = 1;
+    // Gråskala til/fra
+    public static boolean grey = true;
 
-    // 1=ascii 0=normalt billede
-    public static int ascii = 1;
+    // ASCII konvertering til/fra
+    public static boolean ascii = true;
 
     // Gør de brugte tegn større og mindre
     public static int charScale = 3;
-
-
-
 
     public static void main(String[] args) {
         new win();
