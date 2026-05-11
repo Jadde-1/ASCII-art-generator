@@ -37,9 +37,10 @@ public class win extends JFrame {
     win() {
         this.setTitle("ASCII Art Generator");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setPreferredSize(new Dimension(width, height));
-        this.setLocationRelativeTo(null);
-        this.setResizable(true);
+
+        // Problem det starter ikke i midten af skærmen som det burde
+        // https://www.tutorialspoint.com/article/how-to-display-a-jframe-to-the-center-of-a-screen-in-java
+
 
         // Color scheme
         Color bgColor = new Color(240, 240, 240);
@@ -69,7 +70,11 @@ public class win extends JFrame {
         mainPanel.add(rightPanel, BorderLayout.CENTER);
 
         getContentPane().add(mainPanel);
+        this.setPreferredSize(new Dimension(width, height));
+        this.setResizable(true);
+
         this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -96,8 +101,6 @@ public class win extends JFrame {
         exportImgBtn.setMargin(new Insets(8, 15, 8, 15));
         exportImgBtn.addActionListener(e -> exportImage());
         panel.add(exportImgBtn);
-
-
         return panel;
     }
 
@@ -119,8 +122,8 @@ public class win extends JFrame {
                 e -> updatePreviewLive()));
         scaleSlider.setBackground(new Color(128, 128, 128));
 
-        // Bit Amount
-        panel.add(createLabeledSlider("Colors (Bit Amount):", bitAmountSlider = new JSlider(2, 256, Main.bitAmount),
+        // Bit Amount - https://en.wikipedia.org/wiki/Color_depth
+        panel.add(createLabeledSlider("Colors (Bit Amount):", bitAmountSlider = new JSlider(2, 32, Main.bitAmount),
                 e -> updatePreviewLive()));
         bitAmountSlider.setBackground(new Color(128, 128, 128));
 
