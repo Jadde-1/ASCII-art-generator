@@ -1,40 +1,32 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class Export {
 
-    // Åbner fildialog og returnerer det valgte billede, eller null hvis annulleret/fejl
-    public static BufferedImage importImage(JFrame parent) {
+    // Åbner fildialog og indlæser det valgte billede ind i win-instansen
+    public void importImage(win window) {
         JFileChooser fileChooser = new JFileChooser();
-
-        if (fileChooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
+        if (fileChooser.showOpenDialog(window) == JFileChooser.APPROVE_OPTION) {
             try {
-                BufferedImage img = ImageIO.read(file);
-                if (img == null) {
-                    return null;
-                }
-                return img;
+                window.originalImage = ImageIO.read(fileChooser.getSelectedFile());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            window.updatePreviewLive();
         }
-        return null;
     }
 
     // Åbner gem-dialog og eksporterer billedet som PNG
     public static void exportPNG(JFrame parent, BufferedImage image) {
-        if (image == null) {
-            return;
-        }
+        if (image == null) return;
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File("ascii_art.png"));
-        fileChooser.setFileFilter(new FileNameExtensionFilter("PNG Files", "png"));
 
         if (fileChooser.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -48,6 +40,4 @@ public class Export {
             }
         }
     }
-
-
 }

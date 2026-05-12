@@ -1,10 +1,7 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class win extends JFrame {
     int height = 850;
@@ -16,17 +13,17 @@ public class win extends JFrame {
     public static int Brgb = 0;
 
     // Top buttons
-    static JButton importBtn, exportImgBtn;
+    JButton importBtn, exportImgBtn;
     // Sliders
-    static JSlider scaleSlider, bitAmountSlider, charScaleSlider;
+    JSlider scaleSlider, bitAmountSlider, charScaleSlider;
     // Checkboxes
-    static JCheckBox asciiCheck, greyCheck;
+    JCheckBox asciiCheck, greyCheck;
     // Dropdowns
-    static JComboBox<String> charTypeDropdown, fontDropdown, fontStyleDropdown;
+    JComboBox<String> charTypeDropdown, fontDropdown, fontStyleDropdown;
     // RGB tekstfelter
-    public static JTextField RrgbField, BrgbField, GrgbField;
+    JTextField RrgbField, BrgbField, GrgbField;
 
-    static JLabel imageLabel;
+    JLabel imageLabel;
 
     BufferedImage originalImage = null;
     BufferedImage displayImage = null;
@@ -37,7 +34,6 @@ public class win extends JFrame {
 
         Color bgColor = new Color(240, 240, 240);
         Color panelColor = new Color(250, 250, 250);
-        Color accentColor = new Color(60, 120, 180);
 
         UIManager.put("Panel.background", bgColor);
         UIManager.put("Label.foreground", new Color(50, 50, 50));
@@ -61,7 +57,7 @@ public class win extends JFrame {
         this.setPreferredSize(new Dimension(width, height));
         this.setResizable(true);
         this.pack();
-        this.setLocationRelativeTo(null); // Centrerer vinduet på skærmen
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -71,12 +67,12 @@ public class win extends JFrame {
 
         importBtn = new JButton("Import Image");
         styleButton(importBtn);
-        importBtn.addActionListener(e -> importImage());
+        importBtn.addActionListener(e -> new Export().importImage(this));
         panel.add(importBtn);
 
         exportImgBtn = new JButton("Export Image");
         styleButton(exportImgBtn);
-        exportImgBtn.addActionListener(e -> exportImage());
+        exportImgBtn.addActionListener(e -> Export.exportPNG(this, displayImage));
         panel.add(exportImgBtn);
 
         return panel;
@@ -102,17 +98,14 @@ public class win extends JFrame {
         titleLabel.setForeground(new Color(0, 0, 0));
         panel.add(titleLabel);
 
-        // Scale slider opdater kun når slideren slippes
         scaleSlider = new JSlider(0, 50, (int) Main.scale);
         panel.add(createLabeledSlider("Scale:", scaleSlider));
         scaleSlider.setBackground(new Color(128, 128, 128));
 
-        // Bit Amount slider
         bitAmountSlider = new JSlider(2, 24, Main.bitAmount);
         panel.add(createLabeledSlider("Colors (Bit Amount):", bitAmountSlider));
         bitAmountSlider.setBackground(new Color(128, 128, 128));
 
-        // Grayscale checkbox
         greyCheck = new JCheckBox("Grayscale", Main.grey);
         greyCheck.setAlignmentX(Component.CENTER_ALIGNMENT);
         greyCheck.setBackground(new Color(128, 128, 128));
@@ -120,7 +113,6 @@ public class win extends JFrame {
         greyCheck.addActionListener(e -> updatePreviewLive());
         panel.add(greyCheck);
 
-        // ASCII mode checkbox
         asciiCheck = new JCheckBox("Enable ASCII Mode", Main.ascii);
         asciiCheck.setAlignmentX(Component.CENTER_ALIGNMENT);
         asciiCheck.setBackground(new Color(128, 128, 128));
@@ -128,37 +120,33 @@ public class win extends JFrame {
         asciiCheck.addActionListener(e -> updatePreviewLive());
         panel.add(asciiCheck);
 
-        // Character scale slider
         charScaleSlider = new JSlider(1, 10, Main.charScale);
         panel.add(createLabeledSlider("Character Quality:", charScaleSlider));
         charScaleSlider.setBackground(new Color(128, 128, 128));
 
-        // Character type dropdown
         String[] charTypes = {"Letters", "Numbers", "Mixed", "Full", "Blocks", "Rain"};
         charTypeDropdown = createDropdown("Character Type:", charTypes, Main.text - 1);
         charTypeDropdown.addActionListener(e -> updatePreviewLive());
         panel.add(charTypeDropdown.getParent());
 
-        // Font dropdown
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         fontDropdown = createDropdown("Font:", fonts, 0);
         fontDropdown.addActionListener(e -> updatePreviewLive());
         panel.add(fontDropdown.getParent());
 
-        // Font style dropdown
         String[] styles = {"Normal", "Bold", "Italic", "Bold Italic"};
         fontStyleDropdown = createDropdown("Style:", styles, 0);
         fontStyleDropdown.addActionListener(e -> updatePreviewLive());
         panel.add(fontStyleDropdown.getParent());
 
-        // RGB felter
-        panel.add(createRgbField("R (0-255):", Color.RED, "R"));
-        panel.add(createRgbField("G (0-255):", new Color(0, 180, 0), "G"));
-        panel.add(createRgbField("B (0-255):", new Color(60, 120, 255), "B"));
+        // RGB felter — tilføj wrapper-panelet direkte til controlPanel
+        panel.add(createRgbPanel("R (0-255):", Color.RED, "R"));
+        panel.add(createRgbPanel("G (0-255):", new Color(0, 180, 0), "G"));
+        panel.add(createRgbPanel("B (0-255):", new Color(60, 120, 255), "B"));
+
         return panel;
     }
 
-    // Slider der kun opdaterer når man slipper
     private JPanel createLabeledSlider(String labelText, JSlider slider) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(128, 128, 128));
@@ -174,7 +162,6 @@ public class win extends JFrame {
         slider.setMajorTickSpacing(slider.getMaximum() / 5);
         slider.setBackground(new Color(250, 250, 250));
 
-        // Kun opdater når slideren slippes ikke ved hvert lille træk
         slider.addChangeListener(e -> {
             if (!slider.getValueIsAdjusting()) {
                 updatePreviewLive();
@@ -206,131 +193,85 @@ public class win extends JFrame {
         return dropdown;
     }
 
-    // Hjælpemetode så RGB-felterne ikke er kopieret 3 gange
-    private JTextField createRgbField(String labelText, Color labelColor, String channel) {
+    // Returnerer hele wrapper-panelet (label + felt) så det kan tilføjes korrekt
+    private JPanel createRgbPanel(String labelText, Color labelColor, String channel) {
+        JPanel wrapper = new JPanel();
+        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
+        wrapper.setBackground(new Color(128, 128, 128));
+        wrapper.setMaximumSize(new Dimension(330, 50));
+
         JLabel label = new JLabel(labelText);
         label.setForeground(labelColor);
 
         JTextField field = new JTextField("0");
         field.setMaximumSize(new Dimension(330, 25));
 
-        // Document listener opdaterer ved hvert tastetryk
-        field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                tryUpdate();
-            }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                tryUpdate();
-            }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                tryUpdate();
-            }
-            void tryUpdate() {
+        // Gem reference til feltet
+        switch (channel) {
+            case "R" -> RrgbField = field;
+            case "G" -> GrgbField = field;
+            case "B" -> BrgbField = field;
+        }
 
+        field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { tryUpdate(); }
+
+            void tryUpdate() {
                     int val = Math.max(0, Math.min(255, Integer.parseInt(field.getText().trim())));
                     switch (channel) {
-                        case "R" -> {
-                            Rrgb = val; RrgbField = field;
-                        }
-                        case "G" -> {
-                            Grgb = val; GrgbField = field;
-                        }
-                        case "B" -> {
-                            Brgb = val; BrgbField = field;
-                        }
+                        case "R" -> Rrgb = val;
+                        case "G" -> Grgb = val;
+                        case "B" -> Brgb = val;
                     }
                     updatePreviewLive();
 
             }
         });
 
-        // Returnér kun feltet — tilføj label+felt til panel
-        JPanel wrapper = new JPanel();
-        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        wrapper.setBackground(new Color(128, 128, 128));
-        wrapper.setMaximumSize(new Dimension(330, 50));
         wrapper.add(label);
         wrapper.add(field);
-        return field; // bruges ikke direkte, men wrapper tilføjes nedenfor
+        return wrapper;
     }
 
     private JPanel createImagePanel(Color panelColor) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(panelColor);
 
-        imageLabel = new JLabel("Import et billede med knappen i  venstre hjørne", SwingConstants.CENTER);
+        imageLabel = new JLabel("Import et billede med knappen i venstre hjørne", SwingConstants.CENTER);
         imageLabel.setFont(new Font("Arial", Font.ITALIC, 14));
         imageLabel.setForeground(new Color(120, 120, 120));
         panel.add(imageLabel, BorderLayout.CENTER);
         return panel;
     }
 
-    private void importImage() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // https://docs.oracle.com/javase/8/docs/api/javax/swing/JFileChooser.html
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            try {
-                originalImage = ImageIO.read(fileChooser.getSelectedFile());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            updatePreviewLive();
-        }
-    }
-
-    private void updatePreviewLive() {
+    public void updatePreviewLive() {
         if (originalImage == null) return;
-        try {
             displayImage = processImage(originalImage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        showPreview(displayImage);
-    }
 
-    private void showPreview(BufferedImage img) {
-        if (img == null) return;
+
+        if (displayImage == null) return;
         int maxWidth = 1000;
         int maxHeight = 700;
-        double scale = Math.min((double) maxWidth / img.getWidth(), (double) maxHeight / img.getHeight());
-        int pw = (int) (img.getWidth() * scale);
-        int ph = (int) (img.getHeight() * scale);
-        imageLabel.setIcon(new ImageIcon(img.getScaledInstance(pw, ph, Image.SCALE_SMOOTH)));
+        double scale = Math.min((double) maxWidth / displayImage.getWidth(), (double) maxHeight / displayImage.getHeight());
+        int pw = (int) (displayImage.getWidth() * scale);
+        int ph = (int) (displayImage.getHeight() * scale);
+        imageLabel.setIcon(new ImageIcon(displayImage.getScaledInstance(pw, ph, Image.SCALE_SMOOTH)));
         imageLabel.setText(null);
     }
 
-    private void exportImage() {
-        if (displayImage == null) {
-            return;
-        }
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File("ascii_art.png"));
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PNG Files", "png"));
-        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            if (!file.getName().toLowerCase().endsWith(".png"))
-                file = new File(file.getAbsolutePath() + ".png");
-            try {
-                ImageIO.write(displayImage, "png", file);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-    }
-
-    private BufferedImage processImage(BufferedImage img) throws IOException {
-        // Kopier originalbilledet så vi ikke ændrer det
+    private BufferedImage processImage(BufferedImage img) {
         BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
         result.getGraphics().drawImage(img, 0, 0, null);
 
-        // Læs indstillinger fra GUI til Main
         Main.scale = scaleSlider.getValue();
         Main.bitAmount = bitAmountSlider.getValue();
         Main.charScale = charScaleSlider.getValue();
         Main.text = charTypeDropdown.getSelectedIndex() + 1;
-        Main.ascii = asciiCheck.isSelected(); // boolean
-        Main.grey = greyCheck.isSelected(); // boolean
+        Main.ascii = asciiCheck.isSelected();
+        Main.grey = greyCheck.isSelected();
+
         result = Downscaler.down(result, Main.scale);
 
         if (Main.grey) {

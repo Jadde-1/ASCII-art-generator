@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-
 public class Symbols {
     static String letters = "@#MBDOQUYXZmnhkdb][}{/|() Il!i;:,.";
     static String numbers = "8963021745 ";
@@ -10,23 +9,12 @@ public class Symbols {
     static String blocks = "█ ▌▀■▄ \u200E";
     static String rain = "▓ ▒ ░";
 
-
     static String fontName = "Monospaced";
     static int fontStyle = Font.PLAIN;
 
     public static void setFont(String name, int style) {
         fontName = name;
         fontStyle = style;
-    }
-
-    // Konverterer dropdown-indeks til Java Font-stil konstant
-    public static int getFontStyle(int dropdownIndex) {
-        return switch (dropdownIndex) {
-            case 1 -> Font.BOLD;
-            case 2 -> Font.ITALIC;
-            case 3 -> Font.BOLD | Font.ITALIC;
-            default -> Font.PLAIN; // 0 = Normal, 4 = Thin (også PLAIN)
-        };
     }
 
     public static String getCharset() {
