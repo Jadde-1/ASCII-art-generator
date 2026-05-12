@@ -2,6 +2,7 @@ flowchart TD
     Main["Main.java"] -->|"new win()"| win
 
     win["win.java\nGUI + processImage()"]
+    win -->|"importImage()"| Export
     win -->|"exportPNG()"| Export
     Export -->|"originalImage"| win
 
