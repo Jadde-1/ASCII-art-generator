@@ -9,7 +9,7 @@ public class Quantization {
         for (int i = 0; i < imgheight; i++) {
             for (int j = 0; j < imgwidth; j++) {
                 Color c = new Color(bufferedImage.getRGB(j, i));
-
+                // https://www.w3schools.com/java/ref_math_floor.asp
                 int qred = (int)(Math.floor(c.getRed() * (bitAmount / 256.0)));
                 int qgreen = (int)(Math.floor(c.getGreen() * (bitAmount / 256.0)));
                 int qblue = (int)(Math.floor(c.getBlue() * (bitAmount / 256.0)));

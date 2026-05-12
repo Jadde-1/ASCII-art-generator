@@ -102,7 +102,7 @@ public class win extends JFrame {
         titleLabel.setForeground(new Color(0, 0, 0));
         panel.add(titleLabel);
 
-        // Scale slider — opdater kun når slideren slippes
+        // Scale slider opdater kun når slideren slippes
         scaleSlider = new JSlider(0, 50, (int) Main.scale);
         panel.add(createLabeledSlider("Scale:", scaleSlider));
         scaleSlider.setBackground(new Color(128, 128, 128));
@@ -174,7 +174,7 @@ public class win extends JFrame {
         slider.setMajorTickSpacing(slider.getMaximum() / 5);
         slider.setBackground(new Color(250, 250, 250));
 
-        // Kun opdater når slideren slippes, ikke ved hvert lille træk
+        // Kun opdater når slideren slippes ikke ved hvert lille træk
         slider.addChangeListener(e -> {
             if (!slider.getValueIsAdjusting()) {
                 updatePreviewLive();
@@ -267,7 +267,7 @@ public class win extends JFrame {
 
     private void importImage() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // https://docs.oracle.com/javase/8/docs/api/javax/swing/JFileChooser.html
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 originalImage = ImageIO.read(fileChooser.getSelectedFile());
