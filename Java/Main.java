@@ -1,8 +1,5 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    // Scaler billedet op eller ned
-    // Høj værdi = mindre billede
+    // Ny update kan du scaleres ned nu. Simplificeret downscaler.java
     public static double scale = 20;
 
     // Jo færre farver jo lavere

@@ -12,14 +12,11 @@ public class Downscaler {
         int newHeight;
 
         if (scale < 1 ) {
-            scale -= 1;
-            newWidth = (int) (bufferedImage.getWidth() * scale)* -1;
-            newHeight = (int) (bufferedImage.getHeight() * scale) * -1;
-        } else {
-            scale += 1;
+            scale = 1;
+        }
             newWidth = (int) (bufferedImage.getWidth() / scale);
             newHeight = (int) (bufferedImage.getHeight() / scale);
-        }
+
 
         BufferedImage SizedImg = new BufferedImage(newWidth, newHeight, bufferedImage.getType());
 
