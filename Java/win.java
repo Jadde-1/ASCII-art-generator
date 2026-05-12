@@ -141,8 +141,8 @@ public class win extends JFrame {
 
         // RGB felter — tilføj wrapper-panelet direkte til controlPanel
         panel.add(createRgbPanel("R (0-255):", Color.RED, "R"));
-        panel.add(createRgbPanel("G (0-255):", new Color(0, 180, 0), "G"));
-        panel.add(createRgbPanel("B (0-255):", new Color(60, 120, 255), "B"));
+        panel.add(createRgbPanel("G (0-255):", Color.green, "G"));
+        panel.add(createRgbPanel("B (0-255):", Color.blue, "B"));
 
         return panel;
     }

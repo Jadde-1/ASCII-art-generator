@@ -1,13 +1,14 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Symbols {
-    static String letters = "@#MBDOQUYXZmnhkdb][}{/|() Il!i;:,.";
+public class Symbols { // AI ------- !!!
+    // Copilot er blevet brugt til at lave disse strings med tegn da vi ikke fandt en liste der kunne kopires ind
+    static String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
     static String numbers = "8963021745 ";
-    static String mixed = "@#8&963Mhdb!i;:,. ";
-    static String full = "@#$%&8BDMWZQOUYXmnhkdb][}{/|()Il!i;:~-,.\u200E ";
-    static String blocks = "█ ▌▀■▄ \u200E";
-    static String rain = "▓ ▒ ░";
+    static String mixed = "@#%&8WMBD9630hdb!i;:,.~*-+=/()[]{} ";
+    static String full = "!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    static String blocks = "█▉▊▋▌▍▎▏▓▒░■□▪▫▲△▼▽◆◇◼◻◾◽ ";
+    static String rain = "▓▒░█▌▐│┃║ ";
 
     static String fontName = "Monospaced";
     static int fontStyle = Font.PLAIN;
