@@ -1,0 +1,25 @@
+flowchart TD
+    Main["Main.java"] -->|"new win()"| win
+
+    win["win.java\nGUI + processImage()"]
+    win -->|"exportPNG()"| Export
+    Export -->|"originalImage"| win
+
+    win -->|"processImage()"| process
+
+    process["processImage()"]
+    process -->|"down(img, scale)"| Downscaler
+    Downscaler -->|"Gray(img) [hvis grey=true]"| GrayScaler
+    GrayScaler -->|"color(img, bitAmount)"| Quantization
+    Quantization -->|"toAscii(img) [hvis ascii=true]"| Symbols
+
+    Symbols -->|"getCharset()"| getCharset["getCharset()\nVælger tegnsæt"]
+    Symbols -->|"getChar(brightness)"| getChar["getChar(brightness)\nVælger tegn"]
+
+    Symbols -->|"Returnerer BufferedImage"| win
+
+    Export["Export.java\nImport / eksport af fil"]
+    Downscaler["Downscaler.java\nSkalerer billede ned/op"]
+    GrayScaler["GrayScaler.java\nHSB-baseret gråskala"]
+    Quantization["Quantization.java\nReducerer farveantal"]
+    Symbols["Symbols.java\nASCII-konvertering"]

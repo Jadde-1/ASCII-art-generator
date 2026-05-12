@@ -17,7 +17,6 @@ public class Downscaler {
             newWidth = (int) (bufferedImage.getWidth() / scale);
             newHeight = (int) (bufferedImage.getHeight() / scale);
 
-
         BufferedImage SizedImg = new BufferedImage(newWidth, newHeight, bufferedImage.getType());
 
         Graphics2D g = SizedImg.createGraphics();
@@ -26,8 +25,6 @@ public class Downscaler {
 
         return SizedImg;
     }
-
-
 }
 
 //Soruces
